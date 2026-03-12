@@ -2,534 +2,676 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Hello JSON | Advanced Toolkit</title>
-	<style>
-		:root {
-			--bg: #fff7ed;
-			--panel: #ffffff;
-			--text: #222;
-			--toolbar: #ff9800;
-			--header: #ff9800;
-			--footer: #ffe0b2;
-			--key: #c7254e;
-			--string: #2a7b2a;
-			--number: #1c6ed5;
-			--history-bg: #fffbf0;
-			--history-border: #ffb74d;
-			--highlight: #ffeb3b;
-			--sidebar-width: 380px;
-		}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello JSON | Advanced Toolkit</title>
+    <style>
+        :root {
+            --bg: #fff7ed;
+            --panel: #ffffff;
+            --text: #222;
+            --toolbar: #ff9800;
+            --header: #ff9800;
+            --footer: #ffe0b2;
+            --key: #c7254e;
+            --string: #2a7b2a;
+            --number: #1c6ed5;
+            --history-bg: #fffbf0;
+            --history-border: #ffb74d;
+            --highlight: #ffeb3b;
+            --sidebar-width: 380px;
+            --accent: #e68a00;
+        }
 
-		.dark {
-			--bg: #1e1e1e;
-			--panel: #252526;
-			--text: #ddd;
-			--toolbar: #333;
-			--header: #222;
-			--footer: #1a1a1a;
-			--key: #9cdcfe;
-			--string: #ce9178;
-			--number: #b5cea8;
-			--history-bg: #2d2d2d;
-			--history-border: #444;
-			--highlight: #615600;
-		}
+        .dark {
+            --bg: #1e1e1e;
+            --panel: #252526;
+            --text: #ddd;
+            --toolbar: #333;
+            --header: #222;
+            --footer: #1a1a1a;
+            --key: #9cdcfe;
+            --string: #ce9178;
+            --number: #b5cea8;
+            --history-bg: #2d2d2d;
+            --history-border: #444;
+            --highlight: #615600;
+            --accent: #ff9800;
+        }
 
-		body {
-			margin: 0;
-			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-			background: var(--bg);
-			color: var(--text);
-			display: flex;
-			flex-direction: column;
-			height: 100vh;
-			overflow: hidden;
-		}
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-		/* --- CONSOLIDATED HEADER --- */
-		header {
-			background: var(--header);
-			color: white;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			padding: 10px 20px;
-			box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-			z-index: 100;
-		}
+        /* --- HEADER --- */
+        header {
+            background: var(--header);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
 
-		.logo {
-			font-weight: bold;
-			font-size: 22px;
-			letter-spacing: 1px;
-		}
+        .logo {
+            font-weight: 800;
+            font-size: 22px;
+            letter-spacing: 1px;
+            font-family: 'Consolas', monospace;
+        }
 
-		.nav-group {
-			display: flex;
-			gap: 8px;
-			align-items: center;
-		}
+        .nav-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
 
-		header button {
-			background: rgba(255, 255, 255, 0.2);
-			border: 1px solid rgba(255, 255, 255, 0.3);
-			color: white;
-			padding: 7px 14px;
-			border-radius: 5px;
-			cursor: pointer;
-			font-size: 13px;
-			transition: 0.2s;
-			font-weight: 600;
-		}
+        header button {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 7px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s ease;
+            font-weight: 600;
+        }
 
-		header button:hover {
-			background: rgba(255, 255, 255, 0.4);
-			transform: translateY(-1px);
-		}
+        header button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
 
-		/* --- SEARCH BOX --- */
-		.search-container {
-			display: flex;
-			align-items: center;
-			background: rgba(0, 0, 0, 0.15);
-			padding: 4px 12px;
-			border-radius: 20px;
-			gap: 8px;
-			border: 1px solid rgba(255, 255, 255, 0.2);
-		}
+        /* --- SEARCH --- */
+        .search-container {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.15);
+            padding: 4px 12px;
+            border-radius: 20px;
+            gap: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
 
-		.search-container input {
-			background: transparent;
-			border: none;
-			color: white;
-			outline: none;
-			padding: 2px;
-			font-size: 13px;
-			width: 150px;
-		}
+        .search-container input {
+            background: transparent;
+            border: none;
+            color: white;
+            outline: none;
+            padding: 2px;
+            font-size: 13px;
+            width: 130px;
+        }
 
-		.search-container input::placeholder {
-			color: rgba(255, 255, 255, 0.8);
-		}
+        .res-pill {
+            background: white;
+            color: var(--toolbar);
+            padding: 1px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: bold;
+        }
 
-		.res-pill {
-			background: white;
-			color: var(--toolbar);
-			padding: 1px 8px;
-			border-radius: 10px;
-			font-size: 11px;
-			font-weight: bold;
-		}
+        /* --- MAIN AREA --- */
+        .main {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+            position: relative;
+        }
 
-		/* --- MAIN AREA --- */
-		.main {
-			flex: 1;
-			display: flex;
-			overflow: hidden;
-			position: relative;
-		}
+        .editor,
+        .viewer {
+            height: 100%;
+            overflow: auto;
+            background: var(--panel);
+            position: relative;
+        }
 
-		.editor,
-		.viewer {
-			height: 100%;
-			overflow: auto;
-			background: var(--panel);
-			position: relative;
-		}
+        .editor {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+        }
 
-		.editor {
-			width: 50%;
-			display: flex;
-			flex-direction: column;
-		}
+        .viewer {
+            width: 50%;
+            padding: 20px;
+            font-family: 'Consolas', monospace;
+            border-left: 1px solid rgba(0, 0, 0, 0.1);
+        }
 
-		textarea {
-			flex: 1;
-			border: none;
-			outline: none;
-			resize: none;
-			font-family: 'Consolas', 'Monaco', monospace;
-			padding: 20px;
-			font-size: 14px;
-			background: transparent;
-			color: var(--text);
-			line-height: 1.6;
-		}
+        textarea {
+            flex: 1;
+            border: none;
+            outline: none;
+            resize: none;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            padding: 20px;
+            font-size: 14px;
+            background: transparent;
+            color: var(--text);
+            line-height: 1.6;
+        }
 
-		.divider {
-			width: 6px;
-			background: #e0e0e0;
-			cursor: col-resize;
-			z-index: 10;
-			transition: background 0.2s;
-		}
+        .divider {
+            width: 4px;
+            background: rgba(0, 0, 0, 0.05);
+            cursor: col-resize;
+            z-index: 10;
+            transition: background 0.2s;
+        }
 
-		.divider:hover {
-			background: var(--toolbar);
-		}
+        .divider:hover {
+            background: var(--toolbar);
+        }
 
-		.viewer {
-			width: 50%;
-			padding: 20px;
-			font-family: 'Consolas', monospace;
-			border-left: 1px solid #ddd;
-		}
+        /* --- SIDEBARS --- */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: calc(var(--sidebar-width) * -1);
+            width: var(--sidebar-width);
+            height: 100%;
+            background: var(--history-bg);
+            border-left: 1px solid var(--history-border);
+            transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
+        }
 
-		/* --- SIDEBARS --- */
-		.sidebar {
-			position: fixed;
-			top: 0;
-			right: calc(var(--sidebar-width) * -1);
-			width: var(--sidebar-width);
-			height: 100%;
-			background: var(--history-bg);
-			border-left: 3px solid var(--history-border);
-			transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-			z-index: 1000;
-			display: flex;
-			flex-direction: column;
-			box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
-		}
+        .sidebar.open {
+            right: 0;
+        }
 
-		.sidebar.open {
-			right: 0;
-		}
+        .sidebar-header {
+            padding: 18px 20px;
+            background: var(--header);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
 
-		.sidebar-header {
-			padding: 15px 20px;
-			background: var(--header);
-			color: white;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			font-weight: bold;
-		}
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 25px;
+            color: var(--text);
+            line-height: 1.6;
+        }
 
-		.sidebar-content {
-			flex: 1;
-			overflow-y: auto;
-			padding: 20px;
-			color: var(--text);
-		}
+        /* --- PROFESSIONAL ABOUT SECTION STYLING --- */
+        .about-title {
+            font-size: 24px;
+            margin-bottom: 5px;
+            color: var(--accent);
+            font-weight: 800;
+        }
 
-		/* --- JSON TREE STYLING --- */
-		.key {
-			color: var(--key);
-			font-weight: bold;
-		}
+        .about-version {
+            font-size: 12px;
+            opacity: 0.6;
+            margin-bottom: 20px;
+            display: block;
+        }
 
-		.string {
-			color: var(--string);
-		}
+        .about-desc {
+            font-size: 14px;
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
 
-		.number {
-			color: var(--number);
-		}
+        .feature-grid {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
 
-		ul {
-			list-style: none;
-			padding-left: 22px;
-			margin: 4px 0;
-			border-left: 1px dashed #ccc;
-		}
+        .feature-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
 
-		.toggle {
-			cursor: pointer;
-			color: var(--toolbar);
-			font-weight: bold;
-			margin-right: 6px;
-			user-select: none;
-		}
+        .feature-icon {
+            background: var(--header);
+            color: white;
+            min-width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            margin-top: 2px;
+        }
 
-		.hidden {
-			display: none;
-		}
+        .feature-text b {
+            display: block;
+            font-size: 14px;
+        }
 
-		mark {
-			background: var(--highlight);
-			color: #000;
-			padding: 0 2px;
-			border-radius: 2px;
-		}
+        .feature-text span {
+            font-size: 13px;
+            opacity: 0.7;
+        }
 
-		/* --- FOOTER --- */
-		footer {
-			background: var(--footer);
-			display: flex;
-			justify-content: space-between;
-			padding: 8px 25px;
-			font-size: 12px;
-			border-top: 1px solid rgba(0, 0, 0, 0.05);
-			color: var(--text);
-		}
+        .dev-card {
+            background: rgba(0, 0, 0, 0.03);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+        }
 
-		.about-link {
-			cursor: pointer;
-			font-weight: bold;
-			color: var(--toolbar);
-			text-decoration: underline;
-		}
+        .dev-name {
+            font-weight: bold;
+            color: var(--text);
+            font-size: 15px;
+            display: block;
+        }
 
-		.history-item {
-			border-bottom: 1px solid #eee;
-			padding: 12px 0;
-		}
+        .dev-role {
+            font-size: 12px;
+            opacity: 0.6;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-		.history-item button {
-			margin-top: 8px;
-			padding: 4px 10px;
-			font-size: 11px;
-			cursor: pointer;
-		}
-	</style>
+        /* --- JSON VIEW --- */
+        .key {
+            color: var(--key);
+            font-weight: bold;
+        }
+
+        .string {
+            color: var(--string);
+        }
+
+        .number {
+            color: var(--number);
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 22px;
+            margin: 4px 0;
+            border-left: 1px dashed rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle {
+            cursor: pointer;
+            color: var(--toolbar);
+            font-weight: bold;
+            margin-right: 6px;
+            user-select: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        mark {
+            background: var(--highlight);
+            color: #000;
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: var(--footer);
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 25px;
+            font-size: 12px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            color: var(--text);
+        }
+
+        .about-link {
+            cursor: pointer;
+            font-weight: bold;
+            color: var(--accent);
+            transition: 0.2s;
+        }
+
+        .about-link:hover {
+            text-decoration: underline;
+        }
+
+        .history-item {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 12px 0;
+        }
+
+        .history-item .actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .history-item button {
+            padding: 5px 12px;
+            font-size: 11px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .history-item button:hover {
+            background: #f0f0f0;
+        }
+
+        .history-item .del-btn {
+            color: #c7254e;
+            border-color: #fcc;
+        }
+
+        .history-item .del-btn:hover {
+            background: #fff0f0;
+        }
+    </style>
 </head>
 
 <body>
 
-	<header>
-		<div class="logo">&lt;Hello JSON&gt;</div>
+    <header>
+        <div class="logo">&lt;Hello JSON /&gt;</div>
 
-		<div class="nav-group">
-			<button onclick="document.getElementById('fileInput').click()">📁 Load JSON</button>
-			<input type="file" id="fileInput" style="display:none" accept=".json,.txt" onchange="loadFile(event)">
-			<button onclick="handleSmartFormat()">✨ Auto-Fix & Format</button>
-			<button onclick="minifyJSON()">Minify</button>
-			<button onclick="clearJSON()">Clear</button>
-			<button onclick="copyJSON()">Copy</button>
-		</div>
+        <div class="nav-group">
+            <button onclick="pasteJSON()">📋 Paste</button>
+            <button onclick="document.getElementById('fileInput').click()">📁 Load File</button>
+            <input type="file" id="fileInput" style="display:none" accept=".json,.txt" onchange="loadFile(event)">
+            <button onclick="handleSmartFormat()">✨ Smart Fix</button>
+            <button onclick="minifyJSON()">Minify</button>
+            <button onclick="clearJSON()">Clear</button>
+            <button onclick="copyJSON()">Copy</button>
+        </div>
 
-		<div class="nav-group">
-			<div class="search-container">
-				🔍 <input type="text" id="searchInput" placeholder="Search..." oninput="searchJSON()">
-				<span class="res-pill" id="resCount">0</span>
-			</div>
-			<button onclick="toggleTheme()">🌓</button>
-			<button onclick="toggleSidebar('historySidebar')">📜 History</button>
-		</div>
-	</header>
+        <div class="nav-group">
+            <div class="search-container">
+                🔍 <input type="text" id="searchInput" placeholder="Find key/value..." oninput="searchJSON()">
+                <span class="res-pill" id="resCount">0</span>
+            </div>
+            <button onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌓</button>
+            <button onclick="toggleSidebar('historySidebar')">📜 History</button>
+        </div>
+    </header>
 
-	<div class="main">
-		<div class="editor">
-			<textarea id="jsonInput"
-				placeholder="Paste your JSON here (even if it's broken or missing brackets)..."></textarea>
-		</div>
-		<div id="drag" class="divider"></div>
-		<div class="viewer" id="viewer"></div>
-	</div>
+    <div class="main">
+        <div class="editor">
+            <textarea id="jsonInput" placeholder="Paste raw or broken JSON here..."></textarea>
+        </div>
+        <div id="drag" class="divider"></div>
+        <div class="viewer" id="viewer"></div>
+    </div>
 
-	<div id="historySidebar" class="sidebar">
-		<div class="sidebar-header">
-			<span>Recent History</span>
-			<button onclick="toggleSidebar('historySidebar')"
-				style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">&times;</button>
-		</div>
-		<div class="sidebar-content" id="historyList"></div>
-	</div>
+    <div id="historySidebar" class="sidebar">
+        <div class="sidebar-header">
+            <span>Session History</span>
+            <button onclick="toggleSidebar('historySidebar')"
+                style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">&times;</button>
+        </div>
+        <div class="sidebar-content" id="historyList"></div>
+    </div>
 
-	<div id="aboutSidebar" class="sidebar">
-		<div class="sidebar-header">
-			<span>About Project</span>
-			<button onclick="toggleSidebar('aboutSidebar')"
-				style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">&times;</button>
-		</div>
-		<div class="sidebar-content">
-			<h2 style="margin-top:0;">&lt;Hello JSON&gt;</h2>
-			<p>This advanced tool is designed to make JSON manipulation effortless. Whether you have perfectly valid
-				data or a messy snippet from a log file, Hello JSON helps you make sense of it.</p>
-			<h3>Key Features:</h3>
-			<ul>
-				<li><b>Smart Repair:</b> Automatically fixes missing brackets, trailing commas, and unquoted keys.</li>
-				<li><b>File Support:</b> Load local .json files directly.</li>
-				<li><b>Search & Find:</b> Real-time highlighting of keys and values with a result counter.</li>
-				<li><b>Tree Visualization:</b> Interactive collapsible view.</li>
-			</ul>
-			<hr style="opacity:0.2">
-			<p>Developed by <b>Abhijeet Khire</b></p>
-			<p><i>"Thanks for visiting us! Stay curious and keep coding."</i></p>
-		</div>
-	</div>
+    <div id="aboutSidebar" class="sidebar">
+        <div class="sidebar-header">
+            <span>System Information</span>
+            <button onclick="toggleSidebar('aboutSidebar')"
+                style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">&times;</button>
+        </div>
+        <div class="sidebar-content">
+            <span class="about-title">&lt;Hello JSON /&gt;</span>
+            <span class="about-version">Professional Toolkit v2.5.0</span>
 
-	<footer>
-		<div>© 2026 | Developed by <b>Abhijeet Khire</b></div>
-		<div class="about-link" onclick="toggleSidebar('aboutSidebar')">ℹ️ About This Project</div>
-	</footer>
+            <p class="about-desc">A high-performance, browser-based environment designed for debugging, formatting, and
+                repairing JSON data structures with millisecond precision.</p>
 
-	<script>
-		const textarea = document.getElementById("jsonInput");
-		const viewer = document.getElementById("viewer");
-		let currentData = null;
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">✔</div>
+                    <div class="feature-text">
+                        <b>Autonomous Repair</b>
+                        <span>Heals missing brackets, unquoted keys, and trailing commas automatically.</span>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon" style="background:#2196F3">⚡</div>
+                    <div class="feature-text">
+                        <b>Real-time Indexing</b>
+                        <span>Instant search across large objects with live result highlighting.</span>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon" style="background:#4CAF50">🌲</div>
+                    <div class="feature-text">
+                        <b>Hierarchical View</b>
+                        <span>Collapsible tree structures for effortless navigation of nested data.</span>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon" style="background:#9C27B0">💾</div>
+                    <div class="feature-text">
+                        <b>Local Persistence</b>
+                        <span>Securely stores your last 30 snippets using browser local storage.</span>
+                    </div>
+                </div>
+            </div>
 
-		// --- ENHANCED REPAIR LOGIC ---
-		function repairJSON(json) {
-			let str = json.trim();
-			if (!str) return "";
+            <div class="dev-card">
+                <span class="dev-role">© 2026 | Developed by</span>
+                <span class="dev-name">Abhijeet Khire</span>
+                <p style="font-size: 13px; margin: 10px 0 0 0; opacity: 0.8;">Focused on building lightweight,
+                    purposeful tools for the modern web ecosystem.</p>
+            </div>
+        </div>
+    </div>
 
-			// 1. Clean trailing noise (dots, commas, etc)
-			str = str.replace(/[.,\s]+$/, "");
+    <footer>
+        <div> &lt;Hello JSON /&gt; © 2026 | Developed by: <b>Abhijeet Khire</b></div>
+        <div class="about-link" onclick="toggleSidebar('aboutSidebar')">ⓘ About</div>
+    </footer>
 
-			// 2. Fix unquoted keys
-			str = str.replace(/([{,]\s*)([a-zA-Z0-9_]+?)\s*:/g, '$1"$2":');
+    <script>
+        const textarea = document.getElementById("jsonInput");
+        const viewer = document.getElementById("viewer");
+        let currentData = null;
 
-			// 3. Remove trailing commas before closures
-			str = str.replace(/,\s*([}\]])/g, '$1');
+        // --- PASTE LOGIC ---
+        async function pasteJSON() {
+            try {
+                const text = await navigator.clipboard.readText();
+                textarea.value = text;
+                handleSmartFormat();
+            } catch (err) {
+                alert("Please allow clipboard access or paste manually into the editor.");
+            }
+        }
 
-			// 4. Bracket Balancer
-			const stack = [];
-			const map = { '{': '}', '[': ']' };
-			for (let char of str) {
-				if (char === '{' || char === '[') stack.push(char);
-				else if (char === '}' || char === ']') {
-					if (stack.length > 0 && char === map[stack[stack.length - 1]]) stack.pop();
-				}
-			}
-			while (stack.length > 0) str += map[stack.pop()];
-			return str;
-		}
+        // --- REPAIR LOGIC ---
+        function repairJSON(json) {
+            let str = json.trim();
+            if (!str) return "";
+            str = str.replace(/[.,\s]+$/, "");
+            str = str.replace(/([{,]\s*)([a-zA-Z0-9_]+?)\s*:/g, '$1"$2":');
+            str = str.replace(/,\s*([}\]])/g, '$1');
+            const stack = [];
+            const map = { '{': '}', '[': ']' };
+            for (let char of str) {
+                if (char === '{' || char === '[') stack.push(char);
+                else if (char === '}' || char === ']') {
+                    if (stack.length > 0 && char === map[stack[stack.length - 1]]) stack.pop();
+                }
+            }
+            while (stack.length > 0) str += map[stack.pop()];
+            return str;
+        }
 
-		function handleSmartFormat() {
-			let raw = textarea.value;
-			try {
-				let fixed = repairJSON(raw);
-				let obj = JSON.parse(fixed);
-				textarea.value = JSON.stringify(obj, null, 2);
-				currentData = obj;
-				renderTree(obj);
-				saveHistory(textarea.value);
-			} catch (e) {
-				alert("Failed to parse. Please check for major syntax errors.");
-			}
-		}
+        function handleSmartFormat() {
+            let raw = textarea.value;
+            try {
+                let fixed = repairJSON(raw);
+                let obj = JSON.parse(fixed);
+                textarea.value = JSON.stringify(obj, null, 2);
+                currentData = obj;
+                renderTree(obj);
+                saveHistory(textarea.value);
+            } catch (e) {
+                alert("Engine could not parse data. Ensure basic JSON structure is present.");
+            }
+        }
 
-		// --- FILE HANDLING ---
-		function loadFile(event) {
-			const file = event.target.files[0];
-			if (!file) return;
-			const reader = new FileReader();
-			reader.onload = (e) => {
-				textarea.value = e.target.result;
-				handleSmartFormat();
-			};
-			reader.readAsText(file);
-		}
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                textarea.value = e.target.result;
+                handleSmartFormat();
+            };
+            reader.readAsText(file);
+        }
 
-		// --- SEARCH & HIGHLIGHT ---
-		function searchJSON() {
-			const query = document.getElementById("searchInput").value.toLowerCase();
-			if (!query) {
-				document.getElementById("resCount").innerText = "0";
-				renderTree(currentData);
-				return;
-			}
-			renderTree(currentData, query);
-		}
+        function searchJSON() {
+            const query = document.getElementById("searchInput").value.toLowerCase();
+            if (!query) {
+                document.getElementById("resCount").innerText = "0";
+                renderTree(currentData);
+                return;
+            }
+            renderTree(currentData, query);
+        }
 
-		function highlight(text, query) {
-			if (!query) return text;
-			const parts = String(text).split(new RegExp(`(${query})`, 'gi'));
-			return parts.map(p => p.toLowerCase() === query ? `<mark>${p}</mark>` : p).join('');
-		}
+        function highlight(text, query) {
+            if (!query) return text;
+            const parts = String(text).split(new RegExp(`(${query})`, 'gi'));
+            return parts.map(p => p.toLowerCase() === query ? `<mark>${p}</mark>` : p).join('');
+        }
 
-		// --- TREE RENDERER ---
-		function renderTree(data, query = "") {
-			viewer.innerHTML = "";
-			let matchCount = 0;
-			if (!data) return;
+        function renderTree(data, query = "") {
+            viewer.innerHTML = "";
+            let matchCount = 0;
+            if (!data) return;
 
-			function build(obj) {
-				let ul = document.createElement("ul");
-				for (let key in obj) {
-					let li = document.createElement("li");
-					let val = obj[key];
+            function build(obj) {
+                let ul = document.createElement("ul");
+                for (let key in obj) {
+                    let li = document.createElement("li");
+                    let val = obj[key];
+                    if (key.toLowerCase().includes(query) && query) matchCount++;
+                    let keyLabel = highlight(key, query);
 
-					if (key.toLowerCase().includes(query) && query) matchCount++;
-					let keyLabel = highlight(key, query);
+                    if (typeof val === "object" && val !== null) {
+                        let t = document.createElement("span"); t.className = "toggle"; t.textContent = "▼";
+                        let k = document.createElement("span"); k.className = "key"; k.innerHTML = keyLabel + ": ";
+                        let child = build(val);
+                        t.onclick = () => {
+                            child.classList.toggle("hidden");
+                            t.textContent = child.classList.contains("hidden") ? "▶" : "▼";
+                        };
+                        li.append(t, k, child);
+                    } else {
+                        let valStr = typeof val === 'string' ? `"${val}"` : String(val);
+                        if (valStr.toLowerCase().includes(query) && query) matchCount++;
+                        li.innerHTML = `<span class="key">${keyLabel}</span>: <span class="${typeof val}">${highlight(valStr, query)}</span>`;
+                    }
+                    ul.appendChild(li);
+                }
+                return ul;
+            }
+            viewer.appendChild(build(data));
+            document.getElementById("resCount").innerText = matchCount;
+        }
 
-					if (typeof val === "object" && val !== null) {
-						let t = document.createElement("span"); t.className = "toggle"; t.textContent = "▼";
-						let k = document.createElement("span"); k.className = "key"; k.innerHTML = keyLabel + ": ";
-						let child = build(val);
-						t.onclick = () => {
-							child.classList.toggle("hidden");
-							t.textContent = child.classList.contains("hidden") ? "▶" : "▼";
-						};
-						li.append(t, k, child);
-					} else {
-						let valStr = typeof val === 'string' ? `"${val}"` : String(val);
-						if (valStr.toLowerCase().includes(query) && query) matchCount++;
-						li.innerHTML = `<span class="key">${keyLabel}</span>: <span class="${typeof val}">${highlight(valStr, query)}</span>`;
-					}
-					ul.appendChild(li);
-				}
-				return ul;
-			}
-			viewer.appendChild(build(data));
-			document.getElementById("resCount").innerText = matchCount;
-		}
+        function toggleSidebar(id) {
+            const el = document.getElementById(id);
+            const isOpen = el.classList.contains('open');
+            document.querySelectorAll('.sidebar').forEach(s => s.classList.remove('open'));
+            if (!isOpen) el.classList.add('open');
+            if (id === 'historySidebar') renderHistory();
+        }
 
-		// --- SIDEBARS ---
-		function toggleSidebar(id) {
-			const el = document.getElementById(id);
-			const isOpen = el.classList.contains('open');
-			document.querySelectorAll('.sidebar').forEach(s => s.classList.remove('open'));
-			if (!isOpen) el.classList.add('open');
-			if (id === 'historySidebar') renderHistory();
-		}
+        function saveHistory(json) {
+            if (!json.trim()) return;
+            let history = JSON.parse(localStorage.getItem("jsonHistory") || "[]");
+            if (history.length > 0 && history[0].json === json) return;
+            history.unshift({ json, time: Date.now() });
+            localStorage.setItem("jsonHistory", JSON.stringify(history.slice(0, 30)));
+        }
 
-		// --- HISTORY ---
-		function saveHistory(json) {
-			if (!json.trim()) return;
-			let history = JSON.parse(localStorage.getItem("jsonHistory") || "[]");
-			history.unshift({ json, time: Date.now() });
-			localStorage.setItem("jsonHistory", JSON.stringify(history.slice(0, 30)));
-		}
-
-		function renderHistory() {
-			let history = JSON.parse(localStorage.getItem("jsonHistory") || "[]");
-			let list = document.getElementById("historyList");
-			list.innerHTML = history.length ? "" : "No history found.";
-			history.forEach((item, i) => {
-				let div = document.createElement("div");
-				div.className = "history-item";
-				div.innerHTML = `
-                    <div style="font-size:11px; opacity:0.6">${new Date(item.time).toLocaleString()}</div>
-                    <div style="font-size:12px; margin:4px 0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">${item.json.substring(0, 50)}</div>
-                    <button onclick="loadHist(${i})">Load Data</button>
+        function renderHistory() {
+            let history = JSON.parse(localStorage.getItem("jsonHistory") || "[]");
+            let list = document.getElementById("historyList");
+            list.innerHTML = history.length ? "" : "No snippets in session history.";
+            history.forEach((item, i) => {
+                let div = document.createElement("div");
+                div.className = "history-item";
+                div.innerHTML = `
+                    <div style="font-size:11px; opacity:0.6">${new Date(item.time).toLocaleTimeString()}</div>
+                    <div style="font-size:12px; margin:4px 0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">${item.json.substring(0, 55)}...</div>
+                    <div class="actions">
+                        <button onclick="loadHist(${i})">Restore</button>
+                        <button class="del-btn" onclick="deleteHist(${i})">Delete</button>
+                    </div>
                 `;
-				list.appendChild(div);
-			});
-		}
-		window.loadHist = (i) => {
-			textarea.value = JSON.parse(localStorage.getItem("jsonHistory"))[i].json;
-			handleSmartFormat();
-			toggleSidebar('historySidebar');
-		};
+                list.appendChild(div);
+            });
+        }
 
-		// --- GENERAL UTILS ---
-		function toggleTheme() {
-			document.body.classList.toggle("dark");
-			localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
-		}
-		function clearJSON() { textarea.value = ""; viewer.innerHTML = ""; currentData = null; document.getElementById("resCount").innerText = "0"; }
-		function copyJSON() { navigator.clipboard.writeText(textarea.value); alert("Copied!"); }
-		function minifyJSON() { try { textarea.value = JSON.stringify(JSON.parse(textarea.value)); } catch (e) { } }
+        window.loadHist = (i) => {
+            textarea.value = JSON.parse(localStorage.getItem("jsonHistory"))[i].json;
+            handleSmartFormat();
+            toggleSidebar('historySidebar');
+        };
 
-		// Panel Resizing
-		const drag = document.getElementById("drag");
-		drag.addEventListener("mousedown", () => document.addEventListener("mousemove", resize));
-		function resize(e) {
-			let p = (e.clientX / window.innerWidth) * 100;
-			if (p > 15 && p < 85) {
-				document.querySelector(".editor").style.width = p + "%";
-				document.querySelector(".viewer").style.width = (100 - p) + "%";
-			}
-		}
-		document.addEventListener("mouseup", () => document.removeEventListener("mousemove", resize));
+        window.deleteHist = (i) => {
+            let history = JSON.parse(localStorage.getItem("jsonHistory") || "[]");
+            history.splice(i, 1);
+            localStorage.setItem("jsonHistory", JSON.stringify(history));
+            renderHistory();
+        };
 
-		// Init
-		if (localStorage.getItem("theme") === "dark") document.body.classList.add("dark");
-	</script>
+        function toggleTheme() {
+            document.body.classList.toggle("dark");
+            localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
+        }
+
+        function clearJSON() { textarea.value = ""; viewer.innerHTML = ""; currentData = null; document.getElementById("resCount").innerText = "0"; }
+        function copyJSON() { navigator.clipboard.writeText(textarea.value); alert("Copied to clipboard."); }
+        function minifyJSON() { try { textarea.value = JSON.stringify(JSON.parse(textarea.value)); } catch (e) { } }
+
+        // Resizing
+        const drag = document.getElementById("drag");
+        drag.addEventListener("mousedown", () => document.addEventListener("mousemove", resize));
+        function resize(e) {
+            let p = (e.clientX / window.innerWidth) * 100;
+            if (p > 20 && p < 80) {
+                document.querySelector(".editor").style.width = p + "%";
+                document.querySelector(".viewer").style.width = (100 - p) + "%";
+            }
+        }
+        document.addEventListener("mouseup", () => document.removeEventListener("mousemove", resize));
+
+        if (localStorage.getItem("theme") === "dark") document.body.classList.add("dark");
+    </script>
 </body>
 
 </html>
